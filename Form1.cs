@@ -46,7 +46,7 @@ namespace LaCasaDelBosqueApp
                     picEscena.Image = new Bitmap(img);
                 }
 
-                picEscena.SizeMode = PictureBoxSizeMode.StretchImage;
+                picEscena.SizeMode = PictureBoxSizeMode.Zoom;
                 picEscena.Refresh();
             }
         }
