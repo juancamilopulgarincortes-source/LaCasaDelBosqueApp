@@ -34,9 +34,10 @@ namespace LaCasaDelBosqueApp
         private void CambiarImagen(string nombreImagen)
         {
             string ruta = Path.Combine(
-                @"C:\Users\Usuario\Desktop\LaCasaDelBosqueApp\imagenes",
-                nombreImagen);
-
+            AppDomain.CurrentDomain.BaseDirectory,
+    "imagenes",
+    nombreImagen);
+            //MessageBox.Show(File.Exists(ruta).ToString());
             if (File.Exists(ruta))
             {
                 picEscena.Image?.Dispose();
