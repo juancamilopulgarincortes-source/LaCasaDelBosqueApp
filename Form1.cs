@@ -12,7 +12,8 @@ namespace LaCasaDelBosqueApp
     {
 
         Juego juego = new Juego();
-
+        private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
+        private int pasoIntro = 0;
         public Form1()
         {
             InitializeComponent();
@@ -21,22 +22,15 @@ namespace LaCasaDelBosqueApp
             {
                 txtComando.Focus();
                 this.ActiveControl = txtComando;
+                Introduccion();
             };
-            Escribir("═══════════════════════════════");
-            Escribir(" LA CASA DEL BOSQUE");
-            Escribir("═══════════════════════════════");
-            Escribir("Despiertas frente a una casa abandonada.");
-            Escribir("");
-            Escribir("Escribe 'ayuda' para ver los comandos.");
-            CambiarImagen("entrada.png");
-            lblUbicacion.Text = "📍 Entrada";
         }
         private void CambiarImagen(string nombreImagen)
         {
             string ruta = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
-    "imagenes",
-    nombreImagen);
+            "imagenes",
+            nombreImagen);
             //MessageBox.Show(File.Exists(ruta).ToString());
             if (File.Exists(ruta))
             {
@@ -51,6 +45,88 @@ namespace LaCasaDelBosqueApp
                 picEscena.Refresh();
             }
         }
+        private void Introduccion()
+        {
+            txtComando.Enabled = false;
+            btnEnviar.Enabled = false;
+
+            rtbHistoria.Clear();
+
+            CambiarImagen("autolluvia.png");
+
+            pasoIntro = 0;
+
+            timerIntro.Interval = 2000; // 2 segundos
+            timerIntro.Tick -= TimerIntro_Tick;
+            timerIntro.Tick += TimerIntro_Tick;
+            timerIntro.Start();
+        }
+        private void TimerIntro_Tick(object sender, EventArgs e)
+        {
+            switch (pasoIntro)
+            {
+                case 0:
+                    Escribir("═════════════════════════");
+                    Escribir(" LA CASA DEL BOSQUE");
+                    Escribir("═════════════════════════");
+                    break;
+
+                case 1:
+                    Escribir("");
+                    Escribir("La lluvia golpea el parabrisas...");
+                    break;
+
+                case 2:
+                    Escribir("");
+                    Escribir("Llevas horas conduciendo por un bosque del que parece imposible salir.");
+                    break;
+
+                case 3:
+                    Escribir("");
+                    Escribir("El GPS dejó de funcionar hace mucho tiempo.");
+                    break;
+
+                case 4:
+                    Escribir("");
+                    Escribir("La carretera termina frente a una vieja casa.");
+                    break;
+
+                case 5:
+                    Escribir("");
+                    Escribir("No hay otra opción.");
+                    break;
+
+                case 6:
+                    Escribir("");
+                    Escribir("Apagas el motor.");
+                    break;
+
+                case 7:
+                    Escribir("");
+                    Escribir("Bajas del automóvil...");
+                    break;
+
+                case 8:
+                    CambiarImagen("entrada.png");
+
+                    Escribir("");
+                    Escribir("Frente a ti se alza una casa abandonada.");
+                    Escribir("");
+                    Escribir("Escribe 'ayuda' para ver los comandos.");
+                    juego.Ubicacion = "Entrada";
+                    lblUbicacion.Text = "📍 Entrada";
+
+                    txtComando.Enabled = true;
+                    btnEnviar.Enabled = true;
+                    txtComando.Focus();
+
+                    timerIntro.Stop();
+                    break;
+            }
+
+            pasoIntro++;
+        }
+
         private void Escribir(string texto)
         {
             rtbHistoria.AppendText(texto + Environment.NewLine);
@@ -71,8 +147,13 @@ namespace LaCasaDelBosqueApp
                     if (juego.Ubicacion == "Entrada")
                     {
                         juego.Ubicacion = "Pasillo";
-                        CambiarImagen("pasillo.png");
-                        lblUbicacion.Text = "📍 pasillo";
+
+                        if (juego.PuertaHabitacionAbierta)
+                            CambiarImagen("puertaabierta.png");
+                        else
+                            CambiarImagen("pasillo.png");
+
+                        lblUbicacion.Text = "📍 Pasillo";
                         Escribir("");
                         Escribir("[ PASILLO ]");
                         Escribir("Entras a la casa.");
@@ -211,22 +292,22 @@ namespace LaCasaDelBosqueApp
                         Escribir("[ USAR RADIO ]");
                         Escribir("");
                         Escribir("*sssshhhhhhhhh*");
-                        Thread.Sleep(1500);
+                        
                         Escribir("");
                         Escribir("*crrrrkkkk*");
-                        Thread.Sleep(1500);
+                        
                         Escribir("");
                         Escribir("Entre la estática distingues una melodía lenta...");
-                        Thread.Sleep(2000);
+                        
                         Escribir("");
                         Escribir("\"There was something I forgot to say\"");
-                        Thread.Sleep(2000);
+                        
                         Escribir("");
                         Escribir("\"I was crying on Saturday night\"");
-                        Thread.Sleep(2000);
+                        
                         Escribir("");
                         Escribir("*ssssshhhhhh*");
-                        Thread.Sleep(1500);
+                        
                         Escribir("");
                         Escribir("La melodía se detiene de golpe.");
                     }
@@ -283,9 +364,9 @@ namespace LaCasaDelBosqueApp
 
                 case "ayuda":
                     Escribir("");
-                    Escribir("═══════════════════════════════");
+                    Escribir("═════════════════════════");
                     Escribir("       COMANDOS");
-                    Escribir("═══════════════════════════════");
+                    Escribir("═════════════════════════");
 
                     Escribir("Movimiento:");
                     Escribir("• entrar");
@@ -310,7 +391,7 @@ namespace LaCasaDelBosqueApp
                     Escribir("• inventario");
                     Escribir("• ayuda");
 
-                    Escribir("═══════════════════════════════");
+                    Escribir("═════════════════════════");
 
                     break;
 
@@ -366,21 +447,25 @@ namespace LaCasaDelBosqueApp
                 case "Habitacion":
                     Escribir("");
                     Escribir("[ EXAMINAR ]");
-                    Escribir("Hay un dibujo infantil pegado a la pared.");
-                    Thread.Sleep(1500);
 
                     if (!juego.SombraVista)
                     {
+                        Escribir("Hay un dibujo infantil pegado a la pared.");
+                        
+
                         Escribir("");
                         Escribir("Una figura oscura se asoma por la ventana.");
-                        Thread.Sleep(1500);
+                        
+
+                        Escribir("");
+                        Escribir("La cortina se cierra de golpe.");
+                        
 
                         juego.SombraVista = true;
                         CambiarImagen("habitacionsinsombra.png");
                     }
                     else
                     {
-                        Escribir("");
                         Escribir("La figura oscura ya no está.");
                     }
 
@@ -394,27 +479,22 @@ namespace LaCasaDelBosqueApp
 
             if (juego.Inventario.Count == 0)
             {
-                Escribir("");
-                Escribir("═══════════════════════════════");
-                Escribir("       INVENTARIO");
-                Escribir("═══════════════════════════════");
-                Escribir("Inventario vacío.");
+            Escribir("");
+            Escribir("═════════════════════════");
+            Escribir("       INVENTARIO");
+            Escribir("═════════════════════════");
+            Escribir("Inventario vacío.");
                 return;
             }
 
             Escribir("");
-            Escribir("═══════════════════════════════");
+            Escribir("═════════════════════════");
             Escribir("       INVENTARIO");
-            Escribir("═══════════════════════════════");
+            Escribir("═════════════════════════");
             foreach (string item in juego.Inventario)
             {
                 Escribir("• " + item);
             }
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.ActiveControl = txtComando;
-            txtComando.Focus();
         }
 
         private void picEscena_Click(object sender, EventArgs e)
@@ -428,6 +508,10 @@ namespace LaCasaDelBosqueApp
         }
 
         private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
