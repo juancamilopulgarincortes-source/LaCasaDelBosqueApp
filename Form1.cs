@@ -56,7 +56,7 @@ namespace LaCasaDelBosqueApp
 
             pasoIntro = 0;
 
-            timerIntro.Interval = 2000; // 2 segundos
+            timerIntro.Interval = 2000; 
             timerIntro.Tick -= TimerIntro_Tick;
             timerIntro.Tick += TimerIntro_Tick;
             timerIntro.Start();
@@ -78,39 +78,21 @@ namespace LaCasaDelBosqueApp
 
                 case 2:
                     Escribir("");
-                    Escribir("Llevas horas conduciendo por un bosque del que parece imposible salir.");
+                    Escribir("Veo una vieja casa.");
                     break;
 
                 case 3:
                     Escribir("");
-                    Escribir("El GPS dejó de funcionar hace mucho tiempo.");
+                    Escribir("Apagas el motor.");
                     break;
 
                 case 4:
                     Escribir("");
-                    Escribir("La carretera termina frente a una vieja casa.");
-                    break;
-
-                case 5:
-                    Escribir("");
-                    Escribir("No hay otra opción.");
-                    break;
-
-                case 6:
-                    Escribir("");
-                    Escribir("Apagas el motor.");
-                    break;
-
-                case 7:
-                    Escribir("");
                     Escribir("Bajas del automóvil...");
                     break;
 
-                case 8:
+                case 5:
                     CambiarImagen("entrada.png");
-
-                    Escribir("");
-                    Escribir("Frente a ti se alza una casa abandonada.");
                     Escribir("");
                     Escribir("Escribe 'ayuda' para ver los comandos.");
                     juego.Ubicacion = "Entrada";
@@ -143,8 +125,6 @@ namespace LaCasaDelBosqueApp
             switch (comando)
             {
                 case "entrar":
-
-                    if (juego.Ubicacion == "Entrada")
                     {
                         juego.Ubicacion = "Pasillo";
 
@@ -158,15 +138,6 @@ namespace LaCasaDelBosqueApp
                         Escribir("[ PASILLO ]");
                         Escribir("Entras a la casa.");
                     }
-                    //else if (ubicacion == "Pasillo" && puertaHabitacionAbierta)
-                    //{
-                    //    ubicacion = "Habitacion";
-                    //    CambiarImagen("habitacion.png");
-
-                    //    Escribir("");
-                    //    Escribir("[ HABITACION ]");
-                    //    Escribir("Entras a la habitación.");
-                    //}
 
                     break;
 
@@ -181,6 +152,30 @@ namespace LaCasaDelBosqueApp
                         Escribir("[ ENTRADA ]");
                         Escribir("Sales de la casa y vuelves a la entrada.");
                     }
+                    else if (juego.Ubicacion == "Auto")
+                    {
+                        juego.Ubicacion = "Entrada";
+                        CambiarImagen("entrada.png");
+                        lblUbicacion.Text = "📍 Entrada";
+                        Escribir("");
+                        Escribir("[ ENTRADA ]");
+                        Escribir("Te alejas del automóvil y vuelves frente a la casa.");
+                    }
+
+                    break;
+
+                case "ir auto":
+
+                    if (juego.Ubicacion == "Entrada")
+                    {
+                        juego.Ubicacion = "Auto";
+                        CambiarImagen("autolluvia.png");
+                        lblUbicacion.Text = "📍 Auto";
+                        Escribir("");
+                        Escribir("[ AUTO ]");
+                        Escribir("Regresas al automóvil.");
+                    }
+
                     break;
 
                 case "ir baño":
@@ -188,7 +183,7 @@ namespace LaCasaDelBosqueApp
                     if (juego.Ubicacion == "Pasillo")
                     {
                         juego.Ubicacion = "Baño";
-                        if (juego.RadioTomada) //radio tomada
+                        if (juego.RadioTomada)
                             CambiarImagen("banosinradio.png");
                         else
                             CambiarImagen("bano.png");
@@ -240,7 +235,7 @@ namespace LaCasaDelBosqueApp
 
                     break;
 
-                case "ir habitacion": //ir habitacion
+                case "ir habitacion":
 
                     if (juego.Ubicacion == "Pasillo")
                     {
@@ -249,7 +244,7 @@ namespace LaCasaDelBosqueApp
                             juego.Ubicacion = "Habitacion";
 
                             if (juego.SombraVista)
-                                CambiarImagen("habitacionsinsombra.png"); //puerta abierta
+                                CambiarImagen("habitacionsinsombra.png");
                             else
                                 CambiarImagen("habitacion.png");
                             lblUbicacion.Text = "📍 Habitacion";
@@ -343,7 +338,7 @@ namespace LaCasaDelBosqueApp
                     MostrarInventario();
                     break;
 
-                case "usar llave": //usar llave
+                case "usar llave":
 
                     if (juego.Ubicacion == "Pasillo" &&
                         juego.Inventario.Contains("llave") &&
@@ -375,6 +370,7 @@ namespace LaCasaDelBosqueApp
                     Escribir("• ir habitacion");
                     Escribir("• ir pasillo");
                     Escribir("• ir entrada");
+                    Escribir("• ir auto");
 
                     Escribir("");
 

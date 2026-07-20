@@ -68,7 +68,7 @@
             this.lblUbicacion.AutoSize = true;
             this.lblUbicacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUbicacion.ForeColor = System.Drawing.Color.White;
-            this.lblUbicacion.Location = new System.Drawing.Point(247, 18);
+            this.lblUbicacion.Location = new System.Drawing.Point(223, 18);
             this.lblUbicacion.Name = "lblUbicacion";
             this.lblUbicacion.Size = new System.Drawing.Size(51, 20);
             this.lblUbicacion.TabIndex = 3;
