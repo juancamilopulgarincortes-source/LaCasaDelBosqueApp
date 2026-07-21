@@ -56,7 +56,7 @@ namespace LaCasaDelBosqueApp
 
             pasoIntro = 0;
 
-            timerIntro.Interval = 2000; 
+            timerIntro.Interval = 2000;
             timerIntro.Tick -= TimerIntro_Tick;
             timerIntro.Tick += TimerIntro_Tick;
             timerIntro.Start();
@@ -73,25 +73,30 @@ namespace LaCasaDelBosqueApp
 
                 case 1:
                     Escribir("");
-                    Escribir("La lluvia golpea el parabrisas...");
+                    Escribir("La lluvia golpea el parabrisas.");
                     break;
 
                 case 2:
                     Escribir("");
-                    Escribir("Veo una vieja casa.");
+                    Escribir("La gasolina se esta agotando.");
                     break;
 
                 case 3:
                     Escribir("");
-                    Escribir("Apagas el motor.");
+                    Escribir("Veo una vieja casa.");
                     break;
 
                 case 4:
                     Escribir("");
-                    Escribir("Bajas del automóvil...");
+                    Escribir("Apagas el motor.");
                     break;
 
                 case 5:
+                    Escribir("");
+                    Escribir("Bajas del automóvil...");
+                    break;
+
+                case 6:
                     CambiarImagen("entrada.png");
                     Escribir("");
                     Escribir("Escribe 'ayuda' para ver los comandos.");
@@ -125,6 +130,8 @@ namespace LaCasaDelBosqueApp
             switch (comando)
             {
                 case "entrar":
+
+                    if (juego.Ubicacion == "Entrada")
                     {
                         juego.Ubicacion = "Pasillo";
 
@@ -287,22 +294,22 @@ namespace LaCasaDelBosqueApp
                         Escribir("[ USAR RADIO ]");
                         Escribir("");
                         Escribir("*sssshhhhhhhhh*");
-                        
+
                         Escribir("");
                         Escribir("*crrrrkkkk*");
-                        
+
                         Escribir("");
                         Escribir("Entre la estática distingues una melodía lenta...");
-                        
+
                         Escribir("");
                         Escribir("\"There was something I forgot to say\"");
-                        
+
                         Escribir("");
                         Escribir("\"I was crying on Saturday night\"");
-                        
+
                         Escribir("");
                         Escribir("*ssssshhhhhh*");
-                        
+
                         Escribir("");
                         Escribir("La melodía se detiene de golpe.");
                     }
@@ -395,6 +402,13 @@ namespace LaCasaDelBosqueApp
                     Escribir("");
                     Escribir("[ ERROR ]");
                     Escribir("No entiendo ese comando.");
+
+                    MessageBox.Show(
+                    "No entiendo ese comando.",
+                    "ERROR",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
                     break;
             }
         }
@@ -447,15 +461,15 @@ namespace LaCasaDelBosqueApp
                     if (!juego.SombraVista)
                     {
                         Escribir("Hay un dibujo infantil pegado a la pared.");
-                        
+
 
                         Escribir("");
                         Escribir("Una figura oscura se asoma por la ventana.");
-                        
+
 
                         Escribir("");
                         Escribir("La cortina se cierra de golpe.");
-                        
+
 
                         juego.SombraVista = true;
                         CambiarImagen("habitacionsinsombra.png");
@@ -475,11 +489,11 @@ namespace LaCasaDelBosqueApp
 
             if (juego.Inventario.Count == 0)
             {
-            Escribir("");
-            Escribir("═════════════════════════");
-            Escribir("       INVENTARIO");
-            Escribir("═════════════════════════");
-            Escribir("Inventario vacío.");
+                Escribir("");
+                Escribir("═════════════════════════");
+                Escribir("       INVENTARIO");
+                Escribir("═════════════════════════");
+                Escribir("Inventario vacío.");
                 return;
             }
 
