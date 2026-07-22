@@ -14,6 +14,11 @@ namespace LaCasaDelBosqueApp
         Juego juego = new Juego();
         private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
         private int pasoIntro = 0;
+
+        private System.Windows.Forms.Timer timerEvento = new System.Windows.Forms.Timer();
+        private List<PasoEvento> pasosEvento = new List<PasoEvento>();
+        private int pasoEvento = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -45,6 +50,17 @@ namespace LaCasaDelBosqueApp
                 picEscena.Refresh();
             }
         }
+        private class PasoEvento
+        {
+            public Action Accion { get; set; }
+            public int Espera { get; set; }
+
+            public PasoEvento(Action accion, int espera)
+            {
+                Accion = accion;
+                Espera = espera;
+            }
+        }
         private void Introduccion()
         {
             txtComando.Enabled = false;
@@ -60,6 +76,46 @@ namespace LaCasaDelBosqueApp
             timerIntro.Tick -= TimerIntro_Tick;
             timerIntro.Tick += TimerIntro_Tick;
             timerIntro.Start();
+        }
+
+        private void IniciarEvento(List<PasoEvento> pasos)
+        {
+            txtComando.Enabled = false;
+            btnEnviar.Enabled = false;
+
+            pasosEvento = pasos;
+            pasoEvento = 0;
+
+            timerEvento.Stop();
+
+            timerEvento.Tick -= TimerEvento_Tick;
+            timerEvento.Tick += TimerEvento_Tick;
+
+            timerEvento.Interval = pasosEvento[0].Espera;
+            timerEvento.Start();
+        }
+
+        private void TimerEvento_Tick(object sender, EventArgs e)
+        {
+            if (pasoEvento < pasosEvento.Count)
+            {
+                pasosEvento[pasoEvento].Accion();
+
+                pasoEvento++;
+
+                if (pasoEvento < pasosEvento.Count)
+                {
+                    timerEvento.Interval = pasosEvento[pasoEvento].Espera;
+                }
+            }
+            else
+            {
+                timerEvento.Stop();
+
+                txtComando.Enabled = true;
+                btnEnviar.Enabled = true;
+                txtComando.Focus();
+            }
         }
         private void TimerIntro_Tick(object sender, EventArgs e)
         {
@@ -290,28 +346,56 @@ namespace LaCasaDelBosqueApp
 
                     if (juego.Inventario.Contains("radio"))
                     {
-                        Escribir("");
-                        Escribir("[ USAR RADIO ]");
-                        Escribir("");
-                        Escribir("*sssshhhhhhhhh*");
+                        IniciarEvento(new List<PasoEvento>
+        {
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("[ USAR RADIO ]");
+            }, 500),
 
-                        Escribir("");
-                        Escribir("*crrrrkkkk*");
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("*sssshhhhhhhhh*");
+            }, 1500),
 
-                        Escribir("");
-                        Escribir("Entre la estática distingues una melodía lenta...");
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("*crrrrkkkk*");
+            }, 2000),
 
-                        Escribir("");
-                        Escribir("\"There was something I forgot to say\"");
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("Entre la estática distingues una melodía lenta...");
+            }, 2500),
 
-                        Escribir("");
-                        Escribir("\"I was crying on Saturday night\"");
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("\"There was something I forgot to say\"");
+            }, 3500),
 
-                        Escribir("");
-                        Escribir("*ssssshhhhhh*");
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("\"I was crying on Saturday night\"");
+            }, 3500),
 
-                        Escribir("");
-                        Escribir("La melodía se detiene de golpe.");
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("*ssssshhhhhh*");
+            }, 2000),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("La melodía se detiene de golpe.");
+            }, 1000)
+        });
                     }
                     else
                     {
@@ -319,97 +403,96 @@ namespace LaCasaDelBosqueApp
                         Escribir("[ USAR RADIO ]");
                         Escribir("No tienes ninguna radio.");
                     }
-
-                    break;
+            break;
 
                 case "examinar":
-                    Examinar();
-                    break;
+                Examinar();
+                break;
 
-                case "tomar llave":
+            case "tomar llave":
 
-                    if (juego.Ubicacion == "Cocina" &&
-                        !juego.Inventario.Contains("llave"))
-                    {
-                        juego.Inventario.Add("llave");
-                        juego.LlaveTomada = true;
-                        CambiarImagen("cocinasinllave.png");
-                        Escribir("");
-                        Escribir("[ TOMAR LLAVE ]");
-                        Escribir("Has tomado la llave.");
-                    }
-
-                    break;
-
-                case "inventario":
-                    MostrarInventario();
-                    break;
-
-                case "usar llave":
-
-                    if (juego.Ubicacion == "Pasillo" &&
-                        juego.Inventario.Contains("llave") &&
-                        !juego.PuertaHabitacionAbierta)
-                    {
-                        juego.Inventario.Remove("llave");
-
-                        juego.PuertaHabitacionAbierta = true;
-                        CambiarImagen("puertaabierta.png");
-
-                        Escribir("");
-                        Escribir("[ USAR LLAVE ]");
-                        Escribir("Usas la llave.");
-                        Escribir("La puerta de la habitación se abre.");
-                    }
-
-                    break;
-
-                case "ayuda":
+                if (juego.Ubicacion == "Cocina" &&
+                    !juego.Inventario.Contains("llave"))
+                {
+                    juego.Inventario.Add("llave");
+                    juego.LlaveTomada = true;
+                    CambiarImagen("cocinasinllave.png");
                     Escribir("");
-                    Escribir("═════════════════════════");
-                    Escribir("       COMANDOS");
-                    Escribir("═════════════════════════");
+                    Escribir("[ TOMAR LLAVE ]");
+                    Escribir("Has tomado la llave.");
+                }
 
-                    Escribir("Movimiento:");
-                    Escribir("• entrar");
-                    Escribir("• ir baño");
-                    Escribir("• ir cocina");
-                    Escribir("• ir habitacion");
-                    Escribir("• ir pasillo");
-                    Escribir("• ir entrada");
-                    Escribir("• ir auto");
+                break;
+
+            case "inventario":
+                MostrarInventario();
+                break;
+
+            case "usar llave":
+
+                if (juego.Ubicacion == "Pasillo" &&
+                    juego.Inventario.Contains("llave") &&
+                    !juego.PuertaHabitacionAbierta)
+                {
+                    juego.Inventario.Remove("llave");
+
+                    juego.PuertaHabitacionAbierta = true;
+                    CambiarImagen("puertaabierta.png");
 
                     Escribir("");
+                    Escribir("[ USAR LLAVE ]");
+                    Escribir("Usas la llave.");
+                    Escribir("La puerta de la habitación se abre.");
+                }
 
-                    Escribir("Interacción:");
-                    Escribir("• examinar");
-                    Escribir("• tomar llave");
-                    Escribir("• usar llave");
-                    Escribir("• tomar radio");
-                    Escribir("• usar radio");
+                break;
 
-                    Escribir("");
+            case "ayuda":
+                Escribir("");
+                Escribir("═════════════════════════");
+                Escribir("       COMANDOS");
+                Escribir("═════════════════════════");
 
-                    Escribir("Información:");
-                    Escribir("• inventario");
-                    Escribir("• ayuda");
+                Escribir("Movimiento:");
+                Escribir("• entrar");
+                Escribir("• ir baño");
+                Escribir("• ir cocina");
+                Escribir("• ir habitacion");
+                Escribir("• ir pasillo");
+                Escribir("• ir entrada");
+                Escribir("• ir auto");
 
-                    Escribir("═════════════════════════");
+                Escribir("");
 
-                    break;
+                Escribir("Interacción:");
+                Escribir("• examinar");
+                Escribir("• tomar llave");
+                Escribir("• usar llave");
+                Escribir("• tomar radio");
+                Escribir("• usar radio");
 
-                default:
-                    Escribir("");
-                    Escribir("[ ERROR ]");
-                    Escribir("No entiendo ese comando.");
+                Escribir("");
 
-                    MessageBox.Show(
-                    "No entiendo ese comando.",
-                    "ERROR",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Escribir("Información:");
+                Escribir("• inventario");
+                Escribir("• ayuda");
 
-                    break;
+                Escribir("═════════════════════════");
+
+                break;
+
+            default:
+                Escribir("");
+                Escribir("[ ERROR ]");
+                Escribir("No entiendo ese comando.");
+
+                MessageBox.Show(
+                "No entiendo ese comando.",
+                "ERROR",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+                break;
             }
         }
 
@@ -460,19 +543,28 @@ namespace LaCasaDelBosqueApp
 
                     if (!juego.SombraVista)
                     {
-                        Escribir("Hay un dibujo infantil pegado a la pared.");
+                        IniciarEvento(new List<PasoEvento>
+    {
+        new PasoEvento(() =>
+        {
+            Escribir("Hay un dibujo infantil pegado a la pared.");
+        }, 2000),
 
+        new PasoEvento(() =>
+        {
+            Escribir("");
+            Escribir("Una figura oscura se asoma por la ventana.");
+        }, 3000),
 
-                        Escribir("");
-                        Escribir("Una figura oscura se asoma por la ventana.");
+        new PasoEvento(() =>
+        {
+            Escribir("");
+            Escribir("La cortina se cierra de golpe.");
 
-
-                        Escribir("");
-                        Escribir("La cortina se cierra de golpe.");
-
-
-                        juego.SombraVista = true;
-                        CambiarImagen("habitacionsinsombra.png");
+            CambiarImagen("habitacionsinsombra.png");
+            juego.SombraVista = true;
+        }, 800)
+    });
                     }
                     else
                     {
@@ -482,7 +574,6 @@ namespace LaCasaDelBosqueApp
                     break;
             }
         }
-
         private void MostrarInventario()
         {
             Escribir("");
