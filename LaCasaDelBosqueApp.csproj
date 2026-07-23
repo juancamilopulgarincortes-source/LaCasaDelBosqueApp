@@ -92,6 +92,7 @@
     <Content Include="imagenes\banosinradio.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="imagenes\patio.png" />
     <Content Include="imagenes\puertaabierta.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -113,6 +114,8 @@
     <Content Include="imagenes\pasillo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="imagenes\sotano1.png" />
+    <Content Include="imagenes\sotano2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
