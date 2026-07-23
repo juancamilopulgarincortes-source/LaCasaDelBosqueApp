@@ -27,16 +27,19 @@ namespace LaCasaDelBosqueApp
             {
                 txtComando.Focus();
                 this.ActiveControl = txtComando;
+                label1.Visible = false;
+                lblUbicacion.Visible = false;
                 Introduccion();
             };
+
         }
+
         private void CambiarImagen(string nombreImagen)
         {
             string ruta = Path.Combine(
             AppDomain.CurrentDomain.BaseDirectory,
             "imagenes",
             nombreImagen);
-            //MessageBox.Show(File.Exists(ruta).ToString());
             if (File.Exists(ruta))
             {
                 picEscena.Image?.Dispose();
@@ -122,42 +125,46 @@ namespace LaCasaDelBosqueApp
             switch (pasoIntro)
             {
                 case 0:
-                    Escribir("═════════════════════════");
-                    Escribir(" LA CASA DEL BOSQUE");
-                    Escribir("═════════════════════════");
-                    break;
-
-                case 1:
                     Escribir("");
                     Escribir("La lluvia golpea el parabrisas.");
                     break;
 
-                case 2:
+                case 1:
                     Escribir("");
                     Escribir("La gasolina se esta agotando.");
                     break;
 
-                case 3:
+                case 2:
                     Escribir("");
                     Escribir("Veo una vieja casa.");
                     break;
 
-                case 4:
+                case 3:
                     Escribir("");
                     Escribir("Apagas el motor.");
                     break;
 
-                case 5:
+                case 4:
                     Escribir("");
                     Escribir("Bajas del automóvil...");
                     break;
 
-                case 6:
+                case 5:
                     CambiarImagen("entrada.png");
+                    break;
+
+                case 6:
+                    label1.Visible = true;
+                    break;
+
+                case 7:
+                    lblUbicacion.Visible = true;
+                    lblUbicacion.Text = "📍 Entrada";
+
+                    juego.Ubicacion = "Entrada";
+
                     Escribir("");
                     Escribir("Escribe 'ayuda' para ver los comandos.");
-                    juego.Ubicacion = "Entrada";
-                    lblUbicacion.Text = "📍 Entrada";
 
                     txtComando.Enabled = true;
                     btnEnviar.Enabled = true;
@@ -403,96 +410,96 @@ namespace LaCasaDelBosqueApp
                         Escribir("[ USAR RADIO ]");
                         Escribir("No tienes ninguna radio.");
                     }
-            break;
+                    break;
 
                 case "examinar":
-                Examinar();
-                break;
+                    Examinar();
+                    break;
 
-            case "tomar llave":
+                case "tomar llave":
 
-                if (juego.Ubicacion == "Cocina" &&
-                    !juego.Inventario.Contains("llave"))
-                {
-                    juego.Inventario.Add("llave");
-                    juego.LlaveTomada = true;
-                    CambiarImagen("cocinasinllave.png");
+                    if (juego.Ubicacion == "Cocina" &&
+                        !juego.Inventario.Contains("llave"))
+                    {
+                        juego.Inventario.Add("llave");
+                        juego.LlaveTomada = true;
+                        CambiarImagen("cocinasinllave.png");
+                        Escribir("");
+                        Escribir("[ TOMAR LLAVE ]");
+                        Escribir("Has tomado la llave.");
+                    }
+
+                    break;
+
+                case "inventario":
+                    MostrarInventario();
+                    break;
+
+                case "usar llave":
+
+                    if (juego.Ubicacion == "Pasillo" &&
+                        juego.Inventario.Contains("llave") &&
+                        !juego.PuertaHabitacionAbierta)
+                    {
+                        juego.Inventario.Remove("llave");
+
+                        juego.PuertaHabitacionAbierta = true;
+                        CambiarImagen("puertaabierta.png");
+
+                        Escribir("");
+                        Escribir("[ USAR LLAVE ]");
+                        Escribir("Usas la llave.");
+                        Escribir("La puerta de la habitación se abre.");
+                    }
+
+                    break;
+
+                case "ayuda":
                     Escribir("");
-                    Escribir("[ TOMAR LLAVE ]");
-                    Escribir("Has tomado la llave.");
-                }
+                    Escribir("═════════════════════════════");
+                    Escribir("COMANDOS");
+                    Escribir("═════════════════════════════");
 
-                break;
-
-            case "inventario":
-                MostrarInventario();
-                break;
-
-            case "usar llave":
-
-                if (juego.Ubicacion == "Pasillo" &&
-                    juego.Inventario.Contains("llave") &&
-                    !juego.PuertaHabitacionAbierta)
-                {
-                    juego.Inventario.Remove("llave");
-
-                    juego.PuertaHabitacionAbierta = true;
-                    CambiarImagen("puertaabierta.png");
+                    Escribir("Movimiento:");
+                    Escribir("• entrar");
+                    Escribir("• ir baño");
+                    Escribir("• ir cocina");
+                    Escribir("• ir habitacion");
+                    Escribir("• ir pasillo");
+                    Escribir("• ir entrada");
+                    Escribir("• ir auto");
 
                     Escribir("");
-                    Escribir("[ USAR LLAVE ]");
-                    Escribir("Usas la llave.");
-                    Escribir("La puerta de la habitación se abre.");
-                }
 
-                break;
+                    Escribir("Interacción:");
+                    Escribir("• examinar");
+                    Escribir("• tomar llave");
+                    Escribir("• usar llave");
+                    Escribir("• tomar radio");
+                    Escribir("• usar radio");
 
-            case "ayuda":
-                Escribir("");
-                Escribir("═════════════════════════");
-                Escribir("       COMANDOS");
-                Escribir("═════════════════════════");
+                    Escribir("");
 
-                Escribir("Movimiento:");
-                Escribir("• entrar");
-                Escribir("• ir baño");
-                Escribir("• ir cocina");
-                Escribir("• ir habitacion");
-                Escribir("• ir pasillo");
-                Escribir("• ir entrada");
-                Escribir("• ir auto");
+                    Escribir("Información:");
+                    Escribir("• inventario");
+                    Escribir("• ayuda");
 
-                Escribir("");
+                    Escribir("═════════════════════════════");
 
-                Escribir("Interacción:");
-                Escribir("• examinar");
-                Escribir("• tomar llave");
-                Escribir("• usar llave");
-                Escribir("• tomar radio");
-                Escribir("• usar radio");
+                    break;
 
-                Escribir("");
+                default:
+                    Escribir("");
+                    Escribir("[ ERROR ]");
+                    Escribir("No entiendo ese comando.");
 
-                Escribir("Información:");
-                Escribir("• inventario");
-                Escribir("• ayuda");
+                    MessageBox.Show(
+                    "No entiendo ese comando.",
+                    "ERROR",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
-                Escribir("═════════════════════════");
-
-                break;
-
-            default:
-                Escribir("");
-                Escribir("[ ERROR ]");
-                Escribir("No entiendo ese comando.");
-
-                MessageBox.Show(
-                "No entiendo ese comando.",
-                "ERROR",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-
-                break;
+                    break;
             }
         }
 
@@ -506,6 +513,13 @@ namespace LaCasaDelBosqueApp
                     Escribir("La puerta está entreabierta.");
                     Escribir("Una corriente fría sale del interior.");
 
+                    break;
+
+                case "Auto":
+                    Escribir("");
+                    Escribir("[ EXAMINAR ]");
+                    Escribir("La gasolina apenas alcanzaría para unos pocos kilómetros.");
+                    Escribir("Por alguna razón, marcharte ahora no parece una opción.");
                     break;
 
                 case "Pasillo":
@@ -581,17 +595,17 @@ namespace LaCasaDelBosqueApp
             if (juego.Inventario.Count == 0)
             {
                 Escribir("");
-                Escribir("═════════════════════════");
-                Escribir("       INVENTARIO");
-                Escribir("═════════════════════════");
+                Escribir("═════════════════════════════");
+                Escribir("INVENTARIO");
+                Escribir("═════════════════════════════");
                 Escribir("Inventario vacío.");
                 return;
             }
 
             Escribir("");
-            Escribir("═════════════════════════");
-            Escribir("       INVENTARIO");
-            Escribir("═════════════════════════");
+            Escribir("═════════════════════════════");
+            Escribir("INVENTARIO");
+            Escribir("═════════════════════════════");
             foreach (string item in juego.Inventario)
             {
                 Escribir("• " + item);
@@ -609,10 +623,16 @@ namespace LaCasaDelBosqueApp
         }
 
         private void label1_Click_1(object sender, EventArgs e)
+
         {
 
         }
         private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblpprompt_Click(object sender, EventArgs e)
         {
 
         }
