@@ -40,6 +40,7 @@ namespace LaCasaDelBosqueApp
             AppDomain.CurrentDomain.BaseDirectory,
             "imagenes",
             nombreImagen);
+
             if (File.Exists(ruta))
             {
                 picEscena.Image?.Dispose();
@@ -271,6 +272,7 @@ namespace LaCasaDelBosqueApp
                     if (juego.Ubicacion == "Pasillo")
                     {
                         juego.Ubicacion = "Cocina";
+
                         if (juego.LlaveTomada)
                             CambiarImagen("cocinasinllave.png");
                         else
@@ -280,6 +282,66 @@ namespace LaCasaDelBosqueApp
                         Escribir("");
                         Escribir("[ COCINA ]");
                         Escribir("Llegas a la cocina.");
+                    }
+                    else if (juego.Ubicacion == "Patio")
+                    {
+                        juego.Ubicacion = "Cocina";
+
+                        if (juego.LlaveTomada)
+                            CambiarImagen("cocinasinllave.png");
+                        else
+                            CambiarImagen("cocina.png");
+
+                        lblUbicacion.Text = "📍 Cocina";
+                        Escribir("");
+                        Escribir("[ COCINA ]");
+                        Escribir("Regresas a la cocina.");
+                    }
+
+                    break;
+
+                case "ir patio":
+
+                    if (juego.Ubicacion == "Cocina")
+                    {
+                        juego.Ubicacion = "Patio";
+
+                        CambiarImagen("patio.png");
+
+                        lblUbicacion.Text = "📍 Patio";
+                        Escribir("");
+                        Escribir("[ PATIO ]");
+                        Escribir("Sales por la puerta trasera hacia el patio.");
+                    }
+                    else if (juego.Ubicacion == "Sotano")
+                    {
+                        juego.Ubicacion = "Patio";
+
+                        CambiarImagen("patio.png");
+
+                        lblUbicacion.Text = "📍 Patio";
+                        Escribir("");
+                        Escribir("[ PATIO ]");
+                        Escribir("Subes la escalera y vuelves al patio.");
+                    }
+
+                    break;
+
+                case "ir sotano":
+
+                    if (juego.Ubicacion == "Patio")
+                    {
+                        juego.Ubicacion = "Sotano";
+
+                        if (juego.CombustibleTomado)
+                            CambiarImagen("sotano2.png");
+                        else
+                            CambiarImagen("sotano1.png");
+
+                        lblUbicacion.Text = "📍 Sótano";
+                        Escribir("");
+                        Escribir("[ SÓTANO ]");
+                        Escribir("Desciendes lentamente por la vieja escalera hacia el sótano.");
                     }
 
                     break;
@@ -431,6 +493,149 @@ namespace LaCasaDelBosqueApp
 
                     break;
 
+                case "tomar combustible":
+
+                    if (juego.Ubicacion == "Sotano" &&
+                        !juego.Inventario.Contains("combustible"))
+                    {
+                        juego.Inventario.Add("combustible");
+                        juego.CombustibleTomado = true;
+
+                        CambiarImagen("sotano2.png");
+
+                        Escribir("");
+                        Escribir("[ TOMAR COMBUSTIBLE ]");
+                        Escribir("Has tomado el bidón de combustible.");
+                    }
+
+                    break;
+
+                case "usar combustible":
+
+                    if (juego.Ubicacion == "Auto" &&
+                        juego.Inventario.Contains("combustible"))
+                    {
+                        juego.Inventario.Remove("combustible");
+                        juego.AutoConCombustible = true;
+
+                        Escribir("");
+                        Escribir("[ USAR COMBUSTIBLE ]");
+                        Escribir("Vacías el bidón en el tanque.");
+                        Escribir("Ahora el automóvil tiene suficiente combustible.");
+                        Escribir("Quizá ahora puedas arrancar el motor.");
+                    }
+                    else
+                    {
+                        Escribir("");
+                        Escribir("[ AUTO ]");
+                        Escribir("No puedes hacer eso ahora.");
+                    }
+
+                    break;
+
+                case "arrancar":
+
+                    if (juego.Ubicacion != "Auto")
+                    {
+                        Escribir("");
+                        Escribir("[ AUTO ]");
+                        Escribir("No estás dentro del automóvil.");
+                    }
+                    else if (!juego.AutoConCombustible)
+                    {
+                        Escribir("");
+                        Escribir("[ AUTO ]");
+                        Escribir("El automóvil no tiene combustible.");
+                        Escribir("Necesitas llenar el tanque antes de arrancarlo.");
+                    }
+                    else
+                    {
+                        IniciarEvento(new List<PasoEvento>
+        {
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("[ AUTO ]");
+                Escribir("Introduces la llave en el contacto...");
+            }, 1500),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("*Rrrrrrrr...*");
+            }, 2000),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("*VRROOOOOM*");
+            }, 2500),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("El motor vuelve a la vida.");
+            }, 2000),
+
+            new PasoEvento(() =>
+            {
+                CambiarImagen("fin.png");
+            }, 1500),
+
+            new PasoEvento(() =>
+            {
+                rtbHistoria.Clear();
+
+                Escribir("");
+                Escribir("Conduces bajo la lluvia sin mirar atrás.");
+                Escribir("");
+                Escribir("La vieja casa desaparece lentamente");
+                Escribir("entre la niebla y los árboles.");
+                Escribir("");
+                Escribir("La radio se enciende sola...");
+            }, 2500),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("*sssshhhhhhhhhh*");
+            }, 2500),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("\"There was something I forgot to say...\"");
+            }, 3000),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("\"I was crying on Saturday night...\"");
+            }, 3500),
+
+            new PasoEvento(() =>
+            {
+                Escribir("");
+                Escribir("══════════════════════════════");
+                Escribir("      LA CASA DEL BOSQUE");
+                Escribir("");
+                Escribir("          VERSIÓN 1.0");
+                Escribir("");
+                Escribir("              FIN");
+                Escribir("");
+                Escribir("      Gracias por jugar");
+                Escribir("══════════════════════════════");
+            }, 4000),
+
+            new PasoEvento(() =>
+            {
+                Application.Exit();
+            }, 8000)
+        });
+                    }
+
+                    break;
+
                 case "inventario":
                     MostrarInventario();
                     break;
@@ -464,6 +669,8 @@ namespace LaCasaDelBosqueApp
                     Escribir("• entrar");
                     Escribir("• ir baño");
                     Escribir("• ir cocina");
+                    Escribir("• ir patio");
+                    Escribir("• ir sotano");
                     Escribir("• ir habitacion");
                     Escribir("• ir pasillo");
                     Escribir("• ir entrada");
@@ -477,6 +684,8 @@ namespace LaCasaDelBosqueApp
                     Escribir("• usar llave");
                     Escribir("• tomar radio");
                     Escribir("• usar radio");
+                    Escribir("• tomar combustible");
+                    Escribir("• usar combustible");
 
                     Escribir("");
 
@@ -548,6 +757,32 @@ namespace LaCasaDelBosqueApp
                         Escribir("Hay una llave oxidada sobre la mesa.");
                     else
                         Escribir("La mesa está vacía. Solo quedan marcas en el polvo donde antes había algo.");
+
+                    break;
+
+                case "Patio":
+                    Escribir("");
+                    Escribir("[ EXAMINAR ]");
+                    Escribir("La lluvia ha convertido la tierra en barro.");
+                    Escribir("La maleza cubre casi todo el patio.");
+                    Escribir("Entre la hierba descubres una vieja escotilla de madera.");
+                    Escribir("Parece conducir al sótano.");
+                    break;
+
+                case "Sotano":
+                    Escribir("");
+                    Escribir("[ EXAMINAR ]");
+
+                    if (!juego.CombustibleTomado)
+                    {
+                        Escribir("El sótano huele intensamente a gasolina.");
+                        Escribir("Junto a la pared hay un viejo bidón de combustible.");
+                    }
+                    else
+                    {
+                        Escribir("El lugar está completamente vacío.");
+                        Escribir("Solo queda una marca húmeda donde estaba el bidón.");
+                    }
 
                     break;
 

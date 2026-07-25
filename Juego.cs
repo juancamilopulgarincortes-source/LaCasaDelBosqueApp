@@ -15,5 +15,9 @@ namespace LaCasaDelBosqueApp
         public bool LlaveTomada = false;
 
         public bool SombraVista = false;
+
+        public bool CombustibleTomado = false;
+
+        public bool AutoConCombustible = false;
     }
 }
