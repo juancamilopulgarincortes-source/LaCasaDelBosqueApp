@@ -4,6 +4,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using LaCasaDelBosqueApp.Modelos;
+using LaCasaDelBosqueApp.Servicios;
 
 namespace LaCasaDelBosqueApp
 
@@ -12,6 +14,7 @@ namespace LaCasaDelBosqueApp
     {
 
         Juego juego = new Juego();
+        GestorImagenes gestorImagenes = new GestorImagenes();
         private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
         private int pasoIntro = 0;
 
@@ -34,26 +37,6 @@ namespace LaCasaDelBosqueApp
 
         }
 
-        private void CambiarImagen(string nombreImagen)
-        {
-            string ruta = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory,
-            "imagenes",
-            nombreImagen);
-
-            if (File.Exists(ruta))
-            {
-                picEscena.Image?.Dispose();
-
-                using (Image img = Image.FromFile(ruta))
-                {
-                    picEscena.Image = new Bitmap(img);
-                }
-
-                picEscena.SizeMode = PictureBoxSizeMode.Zoom;
-                picEscena.Refresh();
-            }
-        }
         private class PasoEvento
         {
             public Action Accion { get; set; }
@@ -72,7 +55,7 @@ namespace LaCasaDelBosqueApp
 
             rtbHistoria.Clear();
 
-            CambiarImagen("autolluvia.png");
+            gestorImagenes.CambiarImagen(picEscena, "autolluvia.png");
 
             pasoIntro = 0;
 
@@ -151,7 +134,7 @@ namespace LaCasaDelBosqueApp
                     break;
 
                 case 5:
-                    CambiarImagen("entrada.png");
+                    gestorImagenes.CambiarImagen(picEscena, "entrada.png");
                     break;
 
                 case 6:
@@ -200,9 +183,9 @@ namespace LaCasaDelBosqueApp
                         juego.Ubicacion = "Pasillo";
 
                         if (juego.PuertaHabitacionAbierta)
-                            CambiarImagen("puertaabierta.png");
+                            gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
                         else
-                            CambiarImagen("pasillo.png");
+                            gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
 
                         lblUbicacion.Text = "📍 Pasillo";
                         Escribir("");
@@ -217,7 +200,7 @@ namespace LaCasaDelBosqueApp
                     if (juego.Ubicacion == "Pasillo")
                     {
                         juego.Ubicacion = "Entrada";
-                        CambiarImagen("entrada.png");
+                        gestorImagenes.CambiarImagen(picEscena, "entrada.png");
                         lblUbicacion.Text = "📍 Entrada";
                         Escribir("");
                         Escribir("[ ENTRADA ]");
@@ -226,7 +209,7 @@ namespace LaCasaDelBosqueApp
                     else if (juego.Ubicacion == "Auto")
                     {
                         juego.Ubicacion = "Entrada";
-                        CambiarImagen("entrada.png");
+                        gestorImagenes.CambiarImagen(picEscena, "entrada.png");
                         lblUbicacion.Text = "📍 Entrada";
                         Escribir("");
                         Escribir("[ ENTRADA ]");
@@ -240,7 +223,7 @@ namespace LaCasaDelBosqueApp
                     if (juego.Ubicacion == "Entrada")
                     {
                         juego.Ubicacion = "Auto";
-                        CambiarImagen("autolluvia.png");
+                        gestorImagenes.CambiarImagen(picEscena, "autolluvia.png"); ;
                         lblUbicacion.Text = "📍 Auto";
                         Escribir("");
                         Escribir("[ AUTO ]");
@@ -255,9 +238,9 @@ namespace LaCasaDelBosqueApp
                     {
                         juego.Ubicacion = "Baño";
                         if (juego.RadioTomada)
-                            CambiarImagen("banosinradio.png");
+                            gestorImagenes.CambiarImagen(picEscena, "banosinradio.png");
                         else
-                            CambiarImagen("bano.png");
+                            gestorImagenes.CambiarImagen(picEscena, "bano.png");
 
                         lblUbicacion.Text = "📍 Baño";
                         Escribir("");
@@ -274,9 +257,9 @@ namespace LaCasaDelBosqueApp
                         juego.Ubicacion = "Cocina";
 
                         if (juego.LlaveTomada)
-                            CambiarImagen("cocinasinllave.png");
+                            gestorImagenes.CambiarImagen(picEscena, "cocinasinllave.png");
                         else
-                            CambiarImagen("cocina.png");
+                            gestorImagenes.CambiarImagen(picEscena, "cocina.png");
 
                         lblUbicacion.Text = "📍 Cocina";
                         Escribir("");
@@ -288,9 +271,9 @@ namespace LaCasaDelBosqueApp
                         juego.Ubicacion = "Cocina";
 
                         if (juego.LlaveTomada)
-                            CambiarImagen("cocinasinllave.png");
+                            gestorImagenes.CambiarImagen(picEscena, "cocinasinllave.png");
                         else
-                            CambiarImagen("cocina.png");
+                            gestorImagenes.CambiarImagen(picEscena, "cocina.png");
 
                         lblUbicacion.Text = "📍 Cocina";
                         Escribir("");
@@ -306,7 +289,7 @@ namespace LaCasaDelBosqueApp
                     {
                         juego.Ubicacion = "Patio";
 
-                        CambiarImagen("patio.png");
+                        gestorImagenes.CambiarImagen(picEscena, "patio.png");
 
                         lblUbicacion.Text = "📍 Patio";
                         Escribir("");
@@ -317,7 +300,7 @@ namespace LaCasaDelBosqueApp
                     {
                         juego.Ubicacion = "Patio";
 
-                        CambiarImagen("patio.png");
+                        gestorImagenes.CambiarImagen(picEscena, "patio.png");
 
                         lblUbicacion.Text = "📍 Patio";
                         Escribir("");
@@ -334,9 +317,9 @@ namespace LaCasaDelBosqueApp
                         juego.Ubicacion = "Sotano";
 
                         if (juego.CombustibleTomado)
-                            CambiarImagen("sotano2.png");
+                            gestorImagenes.CambiarImagen(picEscena, "sotano2.png");
                         else
-                            CambiarImagen("sotano1.png");
+                            gestorImagenes.CambiarImagen(picEscena, "sotano1.png");
 
                         lblUbicacion.Text = "📍 Sótano";
                         Escribir("");
@@ -355,9 +338,9 @@ namespace LaCasaDelBosqueApp
                     {
                         juego.Ubicacion = "Pasillo";
                         if (juego.PuertaHabitacionAbierta)
-                            CambiarImagen("puertaabierta.png");
+                            gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
                         else
-                            CambiarImagen("pasillo.png");
+                            gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
 
                         lblUbicacion.Text = "📍 Pasillo";
                         Escribir("");
@@ -376,9 +359,9 @@ namespace LaCasaDelBosqueApp
                             juego.Ubicacion = "Habitacion";
 
                             if (juego.SombraVista)
-                                CambiarImagen("habitacionsinsombra.png");
+                                gestorImagenes.CambiarImagen(picEscena, "habitacionsinsombra.png");
                             else
-                                CambiarImagen("habitacion.png");
+                                gestorImagenes.CambiarImagen(picEscena, "habitacion.png");
                             lblUbicacion.Text = "📍 Habitacion";
                             Escribir("");
                             Escribir("[ HABITACION ]");
@@ -402,7 +385,7 @@ namespace LaCasaDelBosqueApp
                         juego.Inventario.Add("radio");
                         juego.RadioTomada = true;
 
-                        CambiarImagen("banosinradio.png");
+                        gestorImagenes.CambiarImagen(picEscena, "banosinradio.png");
 
                         Escribir("");
                         Escribir("[ TOMAR RADIO ]");
@@ -485,7 +468,7 @@ namespace LaCasaDelBosqueApp
                     {
                         juego.Inventario.Add("llave");
                         juego.LlaveTomada = true;
-                        CambiarImagen("cocinasinllave.png");
+                        gestorImagenes.CambiarImagen(picEscena, "cocinasinllave.png");
                         Escribir("");
                         Escribir("[ TOMAR LLAVE ]");
                         Escribir("Has tomado la llave.");
@@ -501,7 +484,7 @@ namespace LaCasaDelBosqueApp
                         juego.Inventario.Add("combustible");
                         juego.CombustibleTomado = true;
 
-                        CambiarImagen("sotano2.png");
+                        gestorImagenes.CambiarImagen(picEscena, "sotano2.png");
 
                         Escribir("");
                         Escribir("[ TOMAR COMBUSTIBLE ]");
@@ -579,7 +562,7 @@ namespace LaCasaDelBosqueApp
 
             new PasoEvento(() =>
             {
-                CambiarImagen("fin.png");
+                gestorImagenes.CambiarImagen(picEscena, "fin.png");
             }, 1500),
 
             new PasoEvento(() =>
@@ -649,7 +632,7 @@ namespace LaCasaDelBosqueApp
                         juego.Inventario.Remove("llave");
 
                         juego.PuertaHabitacionAbierta = true;
-                        CambiarImagen("puertaabierta.png");
+                        gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
 
                         Escribir("");
                         Escribir("[ USAR LLAVE ]");
@@ -810,7 +793,7 @@ namespace LaCasaDelBosqueApp
             Escribir("");
             Escribir("La cortina se cierra de golpe.");
 
-            CambiarImagen("habitacionsinsombra.png");
+            gestorImagenes.CambiarImagen(picEscena, "habitacionsinsombra.png");
             juego.SombraVista = true;
         }, 800)
     });

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LaCasaDelBosqueApp
+namespace LaCasaDelBosqueApp.Modelos
 {
     public class Juego
     {
