@@ -58,6 +58,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servicios\GestorImagenes.cs" />
+    <Compile Include="Servicios\GestorMovimiento.cs" />
+    <Compile Include="Servicios\ProcesadorComandos.cs" />
     <Compile Include="Utilidades\PasoEvento.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

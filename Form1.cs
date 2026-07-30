@@ -16,6 +16,7 @@ namespace LaCasaDelBosqueApp
 
         Juego juego = new Juego();
         GestorImagenes gestorImagenes;
+
         private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
         private int pasoIntro = 0;
 
@@ -26,6 +27,8 @@ namespace LaCasaDelBosqueApp
         public Form1()
         {
             InitializeComponent();
+
+            gestorImagenes = new GestorImagenes();
             this.AcceptButton = btnEnviar;
             this.Shown += (s, e) =>
             {
@@ -160,7 +163,7 @@ namespace LaCasaDelBosqueApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string comando = txtComando.Text.ToLower();
+            string comando = txtComando.Text.Trim().ToLower();
 
             txtComando.Clear();
 
@@ -239,44 +242,11 @@ namespace LaCasaDelBosqueApp
                     break;
 
                 case "ayuda":
-                    Escribir("");
-                    Escribir("═════════════════════════════");
-                    Escribir("COMANDOS");
-                    Escribir("═════════════════════════════");
-
-                    Escribir("Movimiento:");
-                    Escribir("• entrar");
-                    Escribir("• ir baño");
-                    Escribir("• ir cocina");
-                    Escribir("• ir patio");
-                    Escribir("• ir sotano");
-                    Escribir("• ir habitacion");
-                    Escribir("• ir pasillo");
-                    Escribir("• ir entrada");
-                    Escribir("• ir auto");
-
-                    Escribir("");
-
-                    Escribir("Interacción:");
-                    Escribir("• examinar");
-                    Escribir("• tomar llave");
-                    Escribir("• usar llave");
-                    Escribir("• tomar radio");
-                    Escribir("• usar radio");
-                    Escribir("• tomar combustible");
-                    Escribir("• usar combustible");
-
-                    Escribir("");
-
-                    Escribir("Información:");
-                    Escribir("• inventario");
-                    Escribir("• ayuda");
-
-                    Escribir("═════════════════════════════");
-
+                    MostrarAyuda();
                     break;
 
                 default:
+
                     Escribir("");
                     Escribir("[ ERROR ]");
                     Escribir("No entiendo ese comando.");
@@ -293,197 +263,171 @@ namespace LaCasaDelBosqueApp
 
         private void IrCocina()
         {
-            if (juego.Ubicacion == "Pasillo")
-            {
-                juego.Ubicacion = "Cocina";
+            string ubicacionAnterior = juego.Ubicacion;
 
-                if (juego.LlaveTomada)
-                    gestorImagenes.CambiarImagen(picEscena, "cocinasinllave.png");
-                else
-                    gestorImagenes.CambiarImagen(picEscena, "cocina.png");
+            if (!juego.IrCocina())
+                return;
 
-                lblUbicacion.Text = "📍 Cocina";
-                Escribir("");
-                Escribir("[ COCINA ]");
-                Escribir("Llegas a la cocina.");
-            }
-            else if (juego.Ubicacion == "Patio")
-            {
-                juego.Ubicacion = "Cocina";
+            if (juego.LlaveTomada)
+                gestorImagenes.CambiarImagen(picEscena, "cocinasinllave.png");
+            else
+                gestorImagenes.CambiarImagen(picEscena, "cocina.png");
 
-                if (juego.LlaveTomada)
-                    gestorImagenes.CambiarImagen(picEscena, "cocinasinllave.png");
-                else
-                    gestorImagenes.CambiarImagen(picEscena, "cocina.png");
+            lblUbicacion.Text = "📍 Cocina";
 
-                lblUbicacion.Text = "📍 Cocina";
-                Escribir("");
-                Escribir("[ COCINA ]");
+            Escribir("");
+            Escribir("[ COCINA ]");
+
+            if (ubicacionAnterior == "Patio")
                 Escribir("Regresas a la cocina.");
-            }
+            else
+                Escribir("Llegas a la cocina.");
         }
 
         private void IrPatio()
         {
-            if (juego.Ubicacion == "Cocina")
-            {
-                juego.Ubicacion = "Patio";
+            string ubicacionAnterior = juego.Ubicacion;
 
-                gestorImagenes.CambiarImagen(picEscena, "patio.png");
+            if (!juego.IrPatio())
+                return;
 
-                lblUbicacion.Text = "📍 Patio";
-                Escribir("");
-                Escribir("[ PATIO ]");
-                Escribir("Sales por la puerta trasera hacia el patio.");
-            }
-            else if (juego.Ubicacion == "Sotano")
-            {
-                juego.Ubicacion = "Patio";
+            gestorImagenes.CambiarImagen(picEscena, "patio.png");
 
-                gestorImagenes.CambiarImagen(picEscena, "patio.png");
+            lblUbicacion.Text = "📍 Patio";
 
-                lblUbicacion.Text = "📍 Patio";
-                Escribir("");
-                Escribir("[ PATIO ]");
+            Escribir("");
+            Escribir("[ PATIO ]");
+
+            if (ubicacionAnterior == "Sotano")
                 Escribir("Subes la escalera y vuelves al patio.");
-            }
+            else
+                Escribir("Sales por la puerta trasera hacia el patio.");
         }
 
         private void IrSotano()
         {
-            if (juego.Ubicacion == "Patio")
-            {
-                juego.Ubicacion = "Sotano";
+            if (!juego.IrSotano())
+                return;
 
-                if (juego.CombustibleTomado)
-                    gestorImagenes.CambiarImagen(picEscena, "sotano2.png");
-                else
-                    gestorImagenes.CambiarImagen(picEscena, "sotano1.png");
+            if (juego.CombustibleTomado)
+                gestorImagenes.CambiarImagen(picEscena, "sotano2.png");
+            else
+                gestorImagenes.CambiarImagen(picEscena, "sotano1.png");
 
-                lblUbicacion.Text = "📍 Sótano";
-                Escribir("");
-                Escribir("[ SÓTANO ]");
-                Escribir("Desciendes lentamente por la vieja escalera hacia el sótano.");
-            }
-        }
+            lblUbicacion.Text = "📍 Sótano";
+
+            Escribir("");
+            Escribir("[ SÓTANO ]");
+            Escribir("Desciendes lentamente por la vieja escalera hacia el sótano.");
+        }   
 
         private void IrPasillo()
         {
-            if (juego.Ubicacion == "Cocina" ||
-                juego.Ubicacion == "Baño" ||
-                juego.Ubicacion == "Habitacion" ||
-                juego.Ubicacion == "Entrada")
-            {
-                juego.Ubicacion = "Pasillo";
+            if (!juego.IrPasillo())
+                return;
 
-                if (juego.PuertaHabitacionAbierta)
-                    gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
-                else
-                    gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
+            if (juego.PuertaHabitacionAbierta)
+                gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
+            else
+                gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
 
-                lblUbicacion.Text = "📍 Pasillo";
-                Escribir("");
-                Escribir("[ PASILLO ]");
-                Escribir("Regresas al pasillo.");
-            }
+            lblUbicacion.Text = "📍 Pasillo";
+
+            Escribir("");
+            Escribir("[ PASILLO ]");
+            Escribir("Regresas al pasillo.");
         }
 
         private void IrBaño()
         {
-            if (juego.Ubicacion == "Pasillo")
-            {
-                juego.Ubicacion = "Baño";
+            if (!juego.IrBaño())
+                return;
 
-                if (juego.RadioTomada)
-                    gestorImagenes.CambiarImagen(picEscena, "banosinradio.png");
-                else
-                    gestorImagenes.CambiarImagen(picEscena, "bano.png");
+            if (juego.RadioTomada)
+                gestorImagenes.CambiarImagen(picEscena, "banosinradio.png");
+            else
+                gestorImagenes.CambiarImagen(picEscena, "bano.png");
 
-                lblUbicacion.Text = "📍 Baño";
-                Escribir("");
-                Escribir("[ BAÑO ]");
-                Escribir("Llegas al baño.");
-            }
+            lblUbicacion.Text = "📍 Baño";
+
+            Escribir("");
+            Escribir("[ BAÑO ]");
+            Escribir("Llegas al baño.");
         }
 
         private void IrHabitacion()
         {
-            if (juego.Ubicacion == "Pasillo")
+            if (juego.Ubicacion != "Pasillo")
+                return;
+
+            if (!juego.IrHabitacion())
             {
-                if (juego.PuertaHabitacionAbierta)
-                {
-                    juego.Ubicacion = "Habitacion";
-
-                    if (juego.SombraVista)
-                        gestorImagenes.CambiarImagen(picEscena, "habitacionsinsombra.png");
-                    else
-                        gestorImagenes.CambiarImagen(picEscena, "habitacion.png");
-
-                    lblUbicacion.Text = "📍 Habitacion";
-                    Escribir("");
-                    Escribir("[ HABITACION ]");
-                    Escribir("Entras a la habitación.");
-                }
-                else
-                {
-                    Escribir("");
-                    Escribir("[ HABITACION ]");
-                    Escribir("La puerta está cerrada. Necesitas una llave.");
-                }
+                Escribir("");
+                Escribir("[ HABITACION ]");
+                Escribir("La puerta está cerrada. Necesitas una llave.");
+                return;
             }
+
+            if (juego.SombraVista)
+                gestorImagenes.CambiarImagen(picEscena, "habitacionsinsombra.png");
+            else
+                gestorImagenes.CambiarImagen(picEscena, "habitacion.png");
+
+            lblUbicacion.Text = "📍 Habitacion";
+
+            Escribir("");
+            Escribir("[ HABITACION ]");
+            Escribir("Entras a la habitación.");
         }
 
         private void IrEntrada()
         {
-            if (juego.Ubicacion == "Pasillo")
-            {
-                juego.Ubicacion = "Entrada";
-                gestorImagenes.CambiarImagen(picEscena, "entrada.png");
-                lblUbicacion.Text = "📍 Entrada";
-                Escribir("");
-                Escribir("[ ENTRADA ]");
-                Escribir("Sales de la casa y vuelves a la entrada.");
-            }
-            else if (juego.Ubicacion == "Auto")
-            {
-                juego.Ubicacion = "Entrada";
-                gestorImagenes.CambiarImagen(picEscena, "entrada.png");
-                lblUbicacion.Text = "📍 Entrada";
-                Escribir("");
-                Escribir("[ ENTRADA ]");
+            string ubicacionAnterior = juego.Ubicacion;
+
+            if (!juego.IrEntrada())
+                return;
+
+            gestorImagenes.CambiarImagen(picEscena, "entrada.png");
+            lblUbicacion.Text = "📍 Entrada";
+
+            Escribir("");
+            Escribir("[ ENTRADA ]");
+
+            if (ubicacionAnterior == "Auto")
                 Escribir("Te alejas del automóvil y vuelves frente a la casa.");
-            }
+            else
+                Escribir("Sales de la casa y vuelves a la entrada.");
         }
 
         private void IrAuto()
         {
-            if (juego.Ubicacion == "Entrada")
-            {
-                juego.Ubicacion = "Auto";
-                gestorImagenes.CambiarImagen(picEscena, "autolluvia.png");
-                lblUbicacion.Text = "📍 Auto";
-                Escribir("");
-                Escribir("[ AUTO ]");
-                Escribir("Regresas al automóvil.");
-            }
+            if (!juego.IrAuto())
+                return;
+
+            gestorImagenes.CambiarImagen(picEscena, "autolluvia.png");
+
+            lblUbicacion.Text = "📍 Auto";
+
+            Escribir("");
+            Escribir("[ AUTO ]");
+            Escribir("Regresas al automóvil.");
         }
 
         private void Entrar()
         {
-            if (juego.Ubicacion == "Entrada")
-            {
-                juego.Ubicacion = "Pasillo";
+            if (!juego.Entrar())
+                return;
 
-                if (juego.PuertaHabitacionAbierta)
-                    gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
-                else
-                    gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
+            if (juego.PuertaHabitacionAbierta)
+                gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
+            else
+                gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
 
-                lblUbicacion.Text = "📍 Pasillo";
-                Escribir("");
-                Escribir("[ PASILLO ]");
-                Escribir("Entras a la casa.");
-            }
+            lblUbicacion.Text = "📍 Pasillo";
+
+            Escribir("");
+            Escribir("[ PASILLO ]");
+            Escribir("Entras a la casa.");
         }
 
         private void TomarLlave()
@@ -873,6 +817,44 @@ namespace LaCasaDelBosqueApp
             {
                 Escribir("• " + item);
             }
+        }
+
+        private void MostrarAyuda()
+        {
+            Escribir("");
+            Escribir("═════════════════════════════");
+            Escribir("COMANDOS");
+            Escribir("═════════════════════════════");
+
+            Escribir("Movimiento:");
+            Escribir("• entrar");
+            Escribir("• ir baño");
+            Escribir("• ir cocina");
+            Escribir("• ir patio");
+            Escribir("• ir sotano");
+            Escribir("• ir habitacion");
+            Escribir("• ir pasillo");
+            Escribir("• ir entrada");
+            Escribir("• ir auto");
+
+            Escribir("");
+
+            Escribir("Interacción:");
+            Escribir("• examinar");
+            Escribir("• tomar llave");
+            Escribir("• usar llave");
+            Escribir("• tomar radio");
+            Escribir("• usar radio");
+            Escribir("• tomar combustible");
+            Escribir("• usar combustible");
+
+            Escribir("");
+
+            Escribir("Información:");
+            Escribir("• inventario");
+            Escribir("• ayuda");
+
+            Escribir("═════════════════════════════");
         }
 
         private void picEscena_Click(object sender, EventArgs e)
