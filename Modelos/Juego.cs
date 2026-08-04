@@ -20,6 +20,8 @@ namespace LaCasaDelBosqueApp.Modelos
 
         public bool AutoConCombustible = false;
 
+        // ===== Movimiento =====
+
         public bool Entrar()
         {
             if (Ubicacion != "Entrada")
@@ -105,6 +107,92 @@ namespace LaCasaDelBosqueApp.Modelos
                 return false;
 
             Ubicacion = "Auto";
+            return true;
+        }
+        // ===== Inventario =====
+
+        public bool TomarLlave()
+        {
+            if (Ubicacion != "Cocina")
+                return false;
+
+            if (Inventario.Contains("llave"))
+                return false;
+
+            Inventario.Add("llave");
+            LlaveTomada = true;
+
+            return true;
+        }
+        public bool TomarRadio()
+        {
+            if (Ubicacion != "Baño")
+                return false;
+
+            if (Inventario.Contains("radio"))
+                return false;
+
+            Inventario.Add("radio");
+            RadioTomada = true;
+
+            return true;
+        }
+        public bool TomarCombustible()
+        {
+            if (Ubicacion != "Sotano")
+                return false;
+
+            if (Inventario.Contains("combustible"))
+                return false;
+
+            Inventario.Add("combustible");
+            CombustibleTomado = true;
+
+            return true;
+        }
+
+        // ===== Interacciones =====
+        public bool UsarLlave()
+        {
+            if (Ubicacion != "Pasillo")
+                return false;
+
+            if (!Inventario.Contains("llave"))
+                return false;
+
+            if (PuertaHabitacionAbierta)
+                return false;
+
+            Inventario.Remove("llave");
+            PuertaHabitacionAbierta = true;
+
+            return true;
+        }
+        public bool UsarCombustible()
+        {
+            if (Ubicacion != "Auto")
+                return false;
+
+            if (!Inventario.Contains("combustible"))
+                return false;
+
+            Inventario.Remove("combustible");
+            AutoConCombustible = true;
+
+            return true;
+        }
+        public bool UsarRadio()
+        {
+            return Inventario.Contains("radio");
+        }
+        public bool PuedeArrancar()
+        {
+            if (Ubicacion != "Auto")
+                return false;
+
+            if (!AutoConCombustible)
+                return false;
+
             return true;
         }
     }
