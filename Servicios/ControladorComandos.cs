@@ -57,5 +57,117 @@ namespace LaCasaDelBosqueApp.Servicios
             else
                 form.EscribirPublico("Sales por la puerta trasera hacia el patio.");
         }
+        public void IrSotano()
+        {
+            if (!juego.IrSotano())
+                return;
+
+            if (juego.CombustibleTomado)
+                gestorImagenes.CambiarImagen(form.Escena, "sotano2.png");
+            else
+                gestorImagenes.CambiarImagen(form.Escena, "sotano1.png");
+
+            form.UbicacionLabel.Text = "📍 Sótano";
+
+            form.MostrarTituloPublico("Sótano");
+            form.EscribirPublico("Desciendes lentamente por la vieja escalera hacia el sótano.");
+        }
+        public void IrBaño()
+        {
+            if (!juego.IrBaño())
+                return;
+
+            if (juego.RadioTomada)
+                gestorImagenes.CambiarImagen(form.Escena, "banosinradio.png");
+            else
+                gestorImagenes.CambiarImagen(form.Escena, "bano.png");
+
+            form.UbicacionLabel.Text = "📍 Baño";
+
+            form.MostrarTituloPublico("Baño");
+            form.EscribirPublico("Llegas al baño.");
+        }
+        public void IrPasillo()
+        {
+            if (!juego.IrPasillo())
+                return;
+
+            if (juego.PuertaHabitacionAbierta)
+                gestorImagenes.CambiarImagen(form.Escena, "puertaabierta.png");
+            else
+                gestorImagenes.CambiarImagen(form.Escena, "pasillo.png");
+
+            form.UbicacionLabel.Text = "📍 Pasillo";
+
+            form.MostrarTituloPublico("Pasillo");
+            form.EscribirPublico("Regresas al pasillo.");
+        }
+        public void Entrar()
+        {
+            if (!juego.Entrar())
+                return;
+
+            if (juego.PuertaHabitacionAbierta)
+                gestorImagenes.CambiarImagen(form.Escena, "puertaabierta.png");
+            else
+                gestorImagenes.CambiarImagen(form.Escena, "pasillo.png");
+
+            form.UbicacionLabel.Text = "📍 Pasillo";
+
+            form.MostrarTituloPublico("Pasillo");
+            form.EscribirPublico("Entras a la casa.");
+        }
+        public void IrEntrada()
+        {
+            string ubicacionAnterior = juego.Ubicacion;
+
+            if (!juego.IrEntrada())
+                return;
+
+            gestorImagenes.CambiarImagen(form.Escena, "entrada.png");
+
+            form.UbicacionLabel.Text = "📍 Entrada";
+
+            form.MostrarTituloPublico("Entrada");
+
+            if (ubicacionAnterior == "Auto")
+                form.EscribirPublico("Te alejas del automóvil y vuelves frente a la casa.");
+            else
+                form.EscribirPublico("Sales de la casa y vuelves a la entrada.");
+        }
+        public void IrAuto()
+        {
+            if (!juego.IrAuto())
+                return;
+
+            gestorImagenes.CambiarImagen(form.Escena, "autolluvia.png");
+
+            form.UbicacionLabel.Text = "📍 Auto";
+
+            form.MostrarTituloPublico("Auto");
+            form.EscribirPublico("Regresas al automóvil.");
+        }
+        public void IrHabitacion()
+        {
+            if (juego.Ubicacion != "Pasillo")
+                return;
+
+            if (!juego.IrHabitacion())
+            {
+                form.MostrarTituloPublico("Habitación");
+                form.EscribirPublico("La puerta está cerrada. Necesitas una llave.");
+                return;
+            }
+
+            if (juego.SombraVista)
+                gestorImagenes.CambiarImagen(form.Escena, "habitacionsinsombra.png");
+            else
+                gestorImagenes.CambiarImagen(form.Escena, "habitacion.png");
+
+            form.UbicacionLabel.Text = "📍 Habitación";
+
+            form.MostrarTituloPublico("Habitación");
+            form.EscribirPublico("Entras a la habitación.");
+        }
     }
 }

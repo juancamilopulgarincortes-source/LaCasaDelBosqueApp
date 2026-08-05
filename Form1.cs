@@ -177,19 +177,19 @@ namespace LaCasaDelBosqueApp
             switch (comando)
             {
                 case "entrar":
-                    Entrar();
+                    controlador.Entrar();
                     break;
 
                 case "ir entrada":
-                    IrEntrada();
+                    controlador.IrEntrada();
                     break;
 
                 case "ir auto":
-                    IrAuto();
+                    controlador.IrAuto();
                     break;
 
                 case "ir baño":
-                    IrBaño();
+                    controlador.IrBaño();
                     break;
 
                 case "ir cocina":
@@ -201,15 +201,15 @@ namespace LaCasaDelBosqueApp
                     break;
 
                 case "ir sotano":
-                    IrSotano();
+                    controlador.IrSotano();
                     break;
 
                 case "ir pasillo":
-                    IrPasillo();
+                    controlador.IrPasillo();
                     break;
 
                 case "ir habitacion":
-                    IrHabitacion();
+                    controlador.IrHabitacion();
                     break;
 
                 case "tomar radio":
@@ -294,123 +294,6 @@ namespace LaCasaDelBosqueApp
             else
                 Escribir("Llegas a la cocina.");
         }
-        private void IrSotano()
-        {
-            if (!juego.IrSotano())
-                return;
-
-            if (juego.CombustibleTomado)
-                gestorImagenes.CambiarImagen(picEscena, "sotano2.png");
-            else
-                gestorImagenes.CambiarImagen(picEscena, "sotano1.png");
-
-            lblUbicacion.Text = "📍 Sótano";
-
-            MostrarTitulo("Sótano");
-            Escribir("Desciendes lentamente por la vieja escalera hacia el sótano.");
-        }   
-        private void IrPasillo()
-        {
-            if (!juego.IrPasillo())
-                return;
-
-            if (juego.PuertaHabitacionAbierta)
-                gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
-            else
-                gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
-
-            lblUbicacion.Text = "📍 Pasillo";
-
-            MostrarTitulo("Pasillo");
-            Escribir("Regresas al pasillo.");
-        }
-
-        private void IrBaño()
-        {
-            if (!juego.IrBaño())
-                return;
-
-            if (juego.RadioTomada)
-                gestorImagenes.CambiarImagen(picEscena, "banosinradio.png");
-            else
-                gestorImagenes.CambiarImagen(picEscena, "bano.png");
-
-            lblUbicacion.Text = "📍 Baño";
-
-            MostrarTitulo("Baño");
-            Escribir("Llegas al baño.");
-        }
-
-        private void IrHabitacion()
-        {
-            if (juego.Ubicacion != "Pasillo")
-                return;
-
-            if (!juego.IrHabitacion())
-            {
-                MostrarTitulo("Habitación");
-                Escribir("La puerta está cerrada. Necesitas una llave.");
-                return;
-            }
-
-            if (juego.SombraVista)
-                gestorImagenes.CambiarImagen(picEscena, "habitacionsinsombra.png");
-            else
-                gestorImagenes.CambiarImagen(picEscena, "habitacion.png");
-
-            lblUbicacion.Text = "📍 Habitacion";
-
-            MostrarTitulo("Habitación");
-            Escribir("Entras a la habitación.");
-        }
-
-        private void IrEntrada()
-        {
-            string ubicacionAnterior = juego.Ubicacion;
-
-            if (!juego.IrEntrada())
-                return;
-
-            gestorImagenes.CambiarImagen(picEscena, "entrada.png");
-            lblUbicacion.Text = "📍 Entrada";
-
-            MostrarTitulo("Entrada");
-
-            if (ubicacionAnterior == "Auto")
-                Escribir("Te alejas del automóvil y vuelves frente a la casa.");
-            else
-                Escribir("Sales de la casa y vuelves a la entrada.");
-        }
-
-        private void IrAuto()
-        {
-            if (!juego.IrAuto())
-                return;
-
-            gestorImagenes.CambiarImagen(picEscena, "autolluvia.png");
-
-            lblUbicacion.Text = "📍 Auto";
-
-            MostrarTitulo("Auto");
-            Escribir("Regresas al automóvil.");
-        }
-
-        private void Entrar()
-        {
-            if (!juego.Entrar())
-                return;
-
-            if (juego.PuertaHabitacionAbierta)
-                gestorImagenes.CambiarImagen(picEscena, "puertaabierta.png");
-            else
-                gestorImagenes.CambiarImagen(picEscena, "pasillo.png");
-
-            lblUbicacion.Text = "📍 Pasillo";
-
-            MostrarTitulo("Pasillo");
-            Escribir("Entras a la casa.");
-        }
-
         private void TomarLlave()
         {
             if (!juego.TomarLlave())
@@ -798,5 +681,4 @@ namespace LaCasaDelBosqueApp
             MostrarTitulo(titulo);
         }
     }
-
 }
