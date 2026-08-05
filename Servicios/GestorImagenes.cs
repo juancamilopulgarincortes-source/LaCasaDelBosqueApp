@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace LaCasaDelBosqueApp.Servicios
 {
-    internal class GestorImagenes
+    public class GestorImagenes
     {
         public void CambiarImagen(PictureBox picEscena, string nombreImagen)
         {

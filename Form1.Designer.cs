@@ -69,7 +69,7 @@
             this.btnEnviar.TabIndex = 2;
             this.btnEnviar.Text = "Enviar";
             this.btnEnviar.UseVisualStyleBackColor = false;
-            this.btnEnviar.Click += new System.EventHandler(this.button1_Click);
+            this.btnEnviar.Click += new System.EventHandler(this.BtnEnviar_Click);
             // 
             // lblUbicacion
             // 
@@ -82,7 +82,6 @@
             this.lblUbicacion.Size = new System.Drawing.Size(49, 15);
             this.lblUbicacion.TabIndex = 3;
             this.lblUbicacion.Text = "label1";
-            this.lblUbicacion.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtComando
             // 
@@ -108,7 +107,6 @@
             this.picEscena.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picEscena.TabIndex = 5;
             this.picEscena.TabStop = false;
-            this.picEscena.Click += new System.EventHandler(this.picEscena_Click);
             // 
             // label1
             // 
@@ -121,7 +119,6 @@
             this.label1.TabIndex = 6;
             this.label1.Text = "La Casa Del Bosque";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // lblpprompt
             // 
@@ -133,7 +130,6 @@
             this.lblpprompt.Name = "lblpprompt";
             this.lblpprompt.Size = new System.Drawing.Size(0, 19);
             this.lblpprompt.TabIndex = 7;
-            this.lblpprompt.Click += new System.EventHandler(this.lblpprompt_Click);
             // 
             // Form1
             // 
@@ -150,7 +146,6 @@
             this.Controls.Add(this.rtbHistoria);
             this.Name = "Form1";
             this.Text = "La casa del bosque";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.picEscena)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

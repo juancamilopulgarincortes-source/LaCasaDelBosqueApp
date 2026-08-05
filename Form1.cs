@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Windows.Forms;
-using System.Drawing;
-using System.IO;
 using LaCasaDelBosqueApp.Modelos;
 using LaCasaDelBosqueApp.Servicios;
 using LaCasaDelBosqueApp.Utilidades;
@@ -13,13 +10,11 @@ namespace LaCasaDelBosqueApp
 {
     public partial class Form1 : Form
     {
-
         Juego juego = new Juego();
         GestorImagenes gestorImagenes;
-
+        private ControladorComandos controlador;
         private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
         private int pasoIntro = 0;
-
         private System.Windows.Forms.Timer timerEvento = new System.Windows.Forms.Timer();
         private List<PasoEvento> pasosEvento = new List<PasoEvento>();
         private int pasoEvento = 0;
@@ -29,7 +24,14 @@ namespace LaCasaDelBosqueApp
             InitializeComponent();
 
             gestorImagenes = new GestorImagenes();
+
+            controlador = new ControladorComandos(
+                this,
+                juego,
+                gestorImagenes);
+
             this.AcceptButton = btnEnviar;
+
             this.Shown += (s, e) =>
             {
                 txtComando.Focus();
@@ -38,9 +40,7 @@ namespace LaCasaDelBosqueApp
                 lblUbicacion.Visible = false;
                 Introduccion();
             };
-
         }
-
         private void Introduccion()
         {
             txtComando.Enabled = false;
@@ -172,13 +172,8 @@ namespace LaCasaDelBosqueApp
             Escribir(titulo.ToUpper());
             Escribir("═════════════════════════════");
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void EjecutarComando(string comando)
         {
-            string comando = txtComando.Text.Trim().ToLower();
-
-            txtComando.Clear();
-
             switch (comando)
             {
                 case "entrar":
@@ -198,11 +193,11 @@ namespace LaCasaDelBosqueApp
                     break;
 
                 case "ir cocina":
-                    IrCocina();
+                    controlador.IrCocina();
                     break;
 
                 case "ir patio":
-                    IrPatio();
+                    controlador.IrPatio();
                     break;
 
                 case "ir sotano":
@@ -231,7 +226,7 @@ namespace LaCasaDelBosqueApp
 
                 case "tomar llave":
                     TomarLlave();
-                    break; ;
+                    break;
 
                 case "usar llave":
                     UsarLlave();
@@ -258,19 +253,24 @@ namespace LaCasaDelBosqueApp
                     break;
 
                 default:
-
-                    Escribir("");
-                    Escribir("[ ERROR ]");
+                    MostrarTitulo("Error");
                     Escribir("No entiendo ese comando.");
 
                     MessageBox.Show(
-                    "No entiendo ese comando.",
-                    "ERROR",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
+                        "No entiendo ese comando.",
+                        "ERROR",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                     break;
             }
+        }
+        private void BtnEnviar_Click(object sender, EventArgs e)
+        {
+            string comando = txtComando.Text.Trim().ToLower();
+
+            txtComando.Clear();
+
+            EjecutarComando(comando);
         }
 
         private void IrCocina()
@@ -294,26 +294,6 @@ namespace LaCasaDelBosqueApp
             else
                 Escribir("Llegas a la cocina.");
         }
-
-        private void IrPatio()
-        {
-            string ubicacionAnterior = juego.Ubicacion;
-
-            if (!juego.IrPatio())
-                return;
-
-            gestorImagenes.CambiarImagen(picEscena, "patio.png");
-
-            lblUbicacion.Text = "📍 Patio";
-
-            MostrarTitulo("Patio");
-
-            if (ubicacionAnterior == "Sotano")
-                Escribir("Subes la escalera y vuelves al patio.");
-            else
-                Escribir("Sales por la puerta trasera hacia el patio.");
-        }
-
         private void IrSotano()
         {
             if (!juego.IrSotano())
@@ -329,7 +309,6 @@ namespace LaCasaDelBosqueApp
             MostrarTitulo("Sótano");
             Escribir("Desciendes lentamente por la vieja escalera hacia el sótano.");
         }   
-
         private void IrPasillo()
         {
             if (!juego.IrPasillo())
@@ -805,30 +784,19 @@ namespace LaCasaDelBosqueApp
             Escribir("• inventario");
             Escribir("• ayuda");
         }
+        public PictureBox Escena => picEscena;
 
-        private void picEscena_Click(object sender, EventArgs e)
+        public Label UbicacionLabel => lblUbicacion;
+
+        public void EscribirPublico(string texto)
         {
-
+            Escribir(texto);
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        public void MostrarTituloPublico(string titulo)
         {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-
-        {
-
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblpprompt_Click(object sender, EventArgs e)
-        {
-
+            MostrarTitulo(titulo);
         }
     }
+
 }
