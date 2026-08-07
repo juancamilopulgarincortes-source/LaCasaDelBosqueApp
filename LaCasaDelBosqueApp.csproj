@@ -58,6 +58,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servicios\ControladorComandos.cs" />
+    <Compile Include="Servicios\GestorEventos.cs" />
     <Compile Include="Servicios\GestorImagenes.cs" />
     <Compile Include="Utilidades\PasoEvento.cs" />
     <EmbeddedResource Include="Form1.resx">
