@@ -320,28 +320,7 @@ namespace LaCasaDelBosqueApp.Servicios
 
                     if (!juego.SombraVista)
                     {
-                        form.IniciarEventoPublico(new List<PasoEvento>
-        {
-            new PasoEvento(() =>
-            {
-                form.EscribirPublico("Hay un dibujo infantil pegado a la pared.");
-            }, 2000),
-
-            new PasoEvento(() =>
-            {
-                form.EscribirPublico("");
-                form.EscribirPublico("Una figura oscura se asoma por la ventana.");
-            }, 3000),
-
-            new PasoEvento(() =>
-            {
-                form.EscribirPublico("");
-                form.EscribirPublico("La cortina se cierra de golpe.");
-
-                gestorImagenes.CambiarImagen(form.Escena, "habitacionsinsombra.png");
-                juego.SombraVista = true;
-            }, 800)
-        });
+                        gestorEventos.EventoFiguraHabitacion();
                     }
                     else
                     {

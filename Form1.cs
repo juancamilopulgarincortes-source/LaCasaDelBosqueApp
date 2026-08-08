@@ -176,10 +176,6 @@ namespace LaCasaDelBosqueApp
         {
             switch (comando)
             {
-                case "arrancar":
-                    Arrancar();
-                    break;
-
                 default:
                     controlador.Ejecutar(comando);
                     break;
@@ -192,106 +188,6 @@ namespace LaCasaDelBosqueApp
 
             EjecutarComando(comando);
         }
-        private void Arrancar()
-        {
-            if (juego.Ubicacion != "Auto")
-            {
-                MostrarTitulo("Auto");
-                Escribir("No estás dentro del automóvil.");
-                return;
-            }
-
-            if (!juego.PuedeArrancar())
-            {
-                MostrarTitulo("Auto");
-                Escribir("El automóvil no tiene combustible.");
-                Escribir("Necesitas llenar el tanque antes de arrancarlo.");
-                return;
-            }
-            
-                IniciarEvento(new List<PasoEvento>
-        {
-            new PasoEvento(() =>
-            {
-                MostrarTitulo("Auto");
-                Escribir("Introduces la llave en el contacto...");
-            }, 1500),
-
-            new PasoEvento(() =>
-            {
-                Escribir("");
-                Escribir("*Rrrrrrrr...*");
-            }, 2000),
-
-            new PasoEvento(() =>
-            {
-                Escribir("");
-                Escribir("*VRROOOOOM*");
-            }, 2500),
-
-            new PasoEvento(() =>
-            {
-                Escribir("");
-                Escribir("El motor vuelve a la vida.");
-            }, 2000),
-
-            new PasoEvento(() =>
-            {
-                gestorImagenes.CambiarImagen(picEscena, "fin.png");
-            }, 1500),
-
-            new PasoEvento(() =>
-            {
-                rtbHistoria.Clear();
-
-                Escribir("");
-                Escribir("Conduces bajo la lluvia sin mirar atrás.");
-                Escribir("");
-                Escribir("La vieja casa desaparece lentamente");
-                Escribir("entre la niebla y los árboles.");
-                Escribir("");
-                Escribir("La radio se enciende sola...");
-            }, 2500),
-
-            new PasoEvento(() =>
-            {
-                Escribir("");
-                Escribir("*sssshhhhhhhhhh*");
-            }, 2500),
-
-            new PasoEvento(() =>
-            {
-                Escribir("");
-                Escribir("\"There was something I forgot to say...\"");
-            }, 3000),
-
-            new PasoEvento(() =>
-            {
-                Escribir("");
-                Escribir("\"I was crying on Saturday night...\"");
-            }, 3500),
-
-            new PasoEvento(() =>
-            {
-                Escribir("");
-                Escribir("══════════════════════════════");
-                Escribir("      LA CASA DEL BOSQUE");
-                Escribir("");
-                Escribir("          VERSIÓN 1.0");
-                Escribir("");
-                Escribir("              FIN");
-                Escribir("");
-                Escribir("      Gracias por jugar");
-                Escribir("══════════════════════════════");
-            }, 4000),
-
-            new PasoEvento(() =>
-            {
-                Application.Exit();
-            }, 8000)
-        });
-            }
-       
         public PictureBox Escena => picEscena;
 
         public Label UbicacionLabel => lblUbicacion;
