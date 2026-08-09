@@ -13,6 +13,7 @@ namespace LaCasaDelBosqueApp
         Juego juego = new Juego();
         GestorImagenes gestorImagenes;
         private ControladorComandos controlador;
+        private GestorTemporizador gestorTemporizador;
         private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
         private int pasoIntro = 0;
         private System.Windows.Forms.Timer timerEvento = new System.Windows.Forms.Timer();
@@ -24,6 +25,13 @@ namespace LaCasaDelBosqueApp
             InitializeComponent();
 
             gestorImagenes = new GestorImagenes();
+
+            gestorTemporizador = new GestorTemporizador(() =>
+            {
+                txtComando.Enabled = true;
+                btnEnviar.Enabled = true;
+                txtComando.Focus();
+            });
 
             controlador = new ControladorComandos(
                 this,
@@ -188,6 +196,7 @@ namespace LaCasaDelBosqueApp
 
             EjecutarComando(comando);
         }
+
         public PictureBox Escena => picEscena;
 
         public Label UbicacionLabel => lblUbicacion;
@@ -196,7 +205,6 @@ namespace LaCasaDelBosqueApp
         {
             Escribir(texto);
         }
-
         public void MostrarTituloPublico(string titulo)
         {
             MostrarTitulo(titulo);

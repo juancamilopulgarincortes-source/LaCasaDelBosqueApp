@@ -60,6 +60,7 @@
     <Compile Include="Servicios\ControladorComandos.cs" />
     <Compile Include="Servicios\GestorEventos.cs" />
     <Compile Include="Servicios\GestorImagenes.cs" />
+    <Compile Include="Servicios\GestorTemporizador.cs" />
     <Compile Include="Utilidades\PasoEvento.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
