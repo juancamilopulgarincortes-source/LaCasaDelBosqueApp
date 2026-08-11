@@ -14,6 +14,7 @@ namespace LaCasaDelBosqueApp
         GestorImagenes gestorImagenes;
         private ControladorComandos controlador;
         private GestorTemporizador gestorTemporizador;
+        private GestorEventos gestorEventos;
         private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
         private int pasoIntro = 0;
 
@@ -30,10 +31,18 @@ namespace LaCasaDelBosqueApp
                 txtComando.Focus();
             });
 
-            controlador = new ControladorComandos(
+            gestorEventos = new GestorEventos(
+
                 this,
                 juego,
                 gestorImagenes);
+
+                controlador = new ControladorComandos(
+
+                this,
+                juego,
+                gestorImagenes,
+                gestorEventos);
 
             this.AcceptButton = btnEnviar;
 

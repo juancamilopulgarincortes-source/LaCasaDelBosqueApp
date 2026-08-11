@@ -13,18 +13,16 @@ namespace LaCasaDelBosqueApp.Servicios
         private readonly GestorEventos gestorEventos;
 
         public ControladorComandos(
+
             Form1 form,
             Juego juego,
-            GestorImagenes gestorImagenes)
+            GestorImagenes gestorImagenes,
+            GestorEventos gestorEventos)
         {
             this.form = form;
             this.juego = juego;
             this.gestorImagenes = gestorImagenes;
-
-            gestorEventos = new GestorEventos(
-            form,
-            juego,
-            gestorImagenes);
+            this.gestorEventos = gestorEventos;
         }
         // ====================
         // MOVIMIENTOS
