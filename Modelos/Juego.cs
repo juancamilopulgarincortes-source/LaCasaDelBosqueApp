@@ -4,21 +4,16 @@ namespace LaCasaDelBosqueApp.Modelos
 {
     public class Juego
     {
-        public string Ubicacion = "Entrada";
+        public string Ubicacion { get; private set; } = "Entrada";
 
-        public List<string> Inventario = new List<string>();
+        public List<string> Inventario { get; } = new List<string>();
 
-        public bool PuertaHabitacionAbierta = false;
-
-        public bool RadioTomada = false;
-
-        public bool LlaveTomada = false;
-
-        public bool SombraVista = false;
-
-        public bool CombustibleTomado = false;
-
-        public bool AutoConCombustible = false;
+        public bool PuertaHabitacionAbierta { get; private set; } = false;
+        public bool RadioTomada { get; private set; } = false;
+        public bool LlaveTomada { get; private set; } = false;
+        public bool SombraVista { get; set; } = false;
+        public bool CombustibleTomado { get; private set; } = false;
+        public bool AutoConCombustible { get; private set; } = false;
 
         // ===== Movimiento =====
 

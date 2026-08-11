@@ -16,9 +16,6 @@ namespace LaCasaDelBosqueApp
         private GestorTemporizador gestorTemporizador;
         private System.Windows.Forms.Timer timerIntro = new System.Windows.Forms.Timer();
         private int pasoIntro = 0;
-        private System.Windows.Forms.Timer timerEvento = new System.Windows.Forms.Timer();
-        private List<PasoEvento> pasosEvento = new List<PasoEvento>();
-        private int pasoEvento = 0;
 
         public Form1()
         {
@@ -65,46 +62,6 @@ namespace LaCasaDelBosqueApp
             timerIntro.Tick += TimerIntro_Tick;
             timerIntro.Start();
         }
-
-        private void IniciarEvento(List<PasoEvento> pasos)
-        {
-            txtComando.Enabled = false;
-            btnEnviar.Enabled = false;
-
-            pasosEvento = pasos;
-            pasoEvento = 0;
-
-            timerEvento.Stop();
-
-            timerEvento.Tick -= TimerEvento_Tick;
-            timerEvento.Tick += TimerEvento_Tick;
-
-            timerEvento.Interval = pasosEvento[0].Espera;
-            timerEvento.Start();
-        }
-
-        private void TimerEvento_Tick(object sender, EventArgs e)
-        {
-            if (pasoEvento < pasosEvento.Count)
-            {
-                pasosEvento[pasoEvento].Accion();
-
-                pasoEvento++;
-
-                if (pasoEvento < pasosEvento.Count)
-                {
-                    timerEvento.Interval = pasosEvento[pasoEvento].Espera;
-                }
-            }
-            else
-            {
-                timerEvento.Stop();
-
-                txtComando.Enabled = true;
-                btnEnviar.Enabled = true;
-                txtComando.Focus();
-            }
-        }
         private void TimerIntro_Tick(object sender, EventArgs e)
         {
             switch (pasoIntro)
@@ -145,8 +102,6 @@ namespace LaCasaDelBosqueApp
                 case 7:
                     lblUbicacion.Visible = true;
                     lblUbicacion.Text = "📍 Entrada";
-
-                    juego.Ubicacion = "Entrada";
 
                     Escribir("");
                     Escribir("Escribe 'ayuda' para ver los comandos.");
@@ -215,7 +170,10 @@ namespace LaCasaDelBosqueApp
         }
         public void IniciarEventoPublico(List<PasoEvento> pasos)
         {
-            IniciarEvento(pasos);
+            txtComando.Enabled = false;
+            btnEnviar.Enabled = false;
+
+            gestorTemporizador.Iniciar(pasos);
         }
         public void LimpiarHistoria()
         {

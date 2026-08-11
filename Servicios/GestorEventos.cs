@@ -206,7 +206,7 @@ namespace LaCasaDelBosqueApp.Servicios
 
             gestorImagenes.CambiarImagen(
                 form.Escena,
-                "habitacionsinsombra.png");
+                "habitacionsinsombra.png"); 
 
             juego.SombraVista = true;
         }, 800)
