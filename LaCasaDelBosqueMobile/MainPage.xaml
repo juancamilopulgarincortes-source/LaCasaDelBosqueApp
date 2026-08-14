@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LaCasaDelBosqueMobile.MainPage"
+             BackgroundColor="#0F0F0F">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto"
+          Padding="15">
+
+        <!-- Ubicación -->
+        <Label
+            Grid.Row="0"
+            x:Name="lblUbicacion"
+            Text="📍 Entrada"
+            TextColor="White"
+            FontSize="20"
+            FontAttributes="Bold"
+            HorizontalOptions="Center"
+            Margin="0,10,0,15" />
+
+        <!-- Imagen de la escena -->
+        <Image
+            Grid.Row="1"
+            x:Name="imgEscena"
+            Source="entrada.png"
+            Aspect="AspectFit"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill" />
+
+        <!-- Historia -->
+        <ScrollView
+            Grid.Row="2"
+            Margin="0,15,0,10"
+            HeightRequest="180">
+
+            <Label
+                x:Name="lblHistoria"
+                Text="La lluvia golpea el parabrisas..."
+                TextColor="White"
+                FontSize="16"
+                LineBreakMode="WordWrap" />
+
+        </ScrollView>
+
+        <!-- Comando -->
+        <Grid
+            Grid.Row="3"
+            ColumnDefinitions="*,Auto"
+            ColumnSpacing="10">
+
+            <Entry
+                Grid.Column="0"
+                x:Name="txtComando"
+                Placeholder="Escribe un comando..."
+                PlaceholderColor="Gray"
+                TextColor="White"
+                BackgroundColor="#1A1A1A"
+                FontSize="16"
+                ReturnType="Send"
+                Completed="OnComandoCompleted" />
+
+            <Button
+                Grid.Column="1"
+                x:Name="btnEnviar"
+                Text="▶"
+                Clicked="OnEnviarClicked"
+                BackgroundColor="#292929"
+                TextColor="White"
+                FontSize="18"
+                WidthRequest="55" />
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>
