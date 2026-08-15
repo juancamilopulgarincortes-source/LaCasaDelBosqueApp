@@ -1,14 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LaCasaDelBosqueMobile.MainPage"
-             BackgroundColor="#0F0F0F">
+             BackgroundColor="#0F0F0F"
+             Title="La Casa del Bosque">
 
     <Grid RowDefinitions="Auto,*,Auto,Auto"
-          Padding="15">
+          Padding="15"
+          RowSpacing="10">
 
-        <!-- Ubicación -->
         <Label
             Grid.Row="0"
             x:Name="lblUbicacion"
@@ -17,37 +18,36 @@
             FontSize="20"
             FontAttributes="Bold"
             HorizontalOptions="Center"
-            Margin="0,10,0,15" />
+            Margin="0,5,0,5" />
 
-        <!-- Imagen de la escena -->
-        <Image
-            Grid.Row="1"
-            x:Name="imgEscena"
-            Source="entrada.png"
-            Aspect="AspectFit"
-            HorizontalOptions="Fill"
-            VerticalOptions="Fill" />
+        <Border Grid.Row="1"
+                Stroke="#333333"
+                StrokeThickness="1"
+                BackgroundColor="#111111"
+                Padding="0">
+            <Image
+                x:Name="imgEscena"
+                Source="entrada.png"
+                Aspect="AspectFit"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill" />
+        </Border>
 
-        <!-- Historia -->
-        <ScrollView
-            Grid.Row="2"
-            Margin="0,15,0,10"
-            HeightRequest="180">
-
+        <ScrollView Grid.Row="2"
+                    x:Name="scrollHistoria"
+                    HeightRequest="190"
+                    Margin="0,5,0,0">
             <Label
                 x:Name="lblHistoria"
                 Text="La lluvia golpea el parabrisas..."
                 TextColor="White"
                 FontSize="16"
                 LineBreakMode="WordWrap" />
-
         </ScrollView>
 
-        <!-- Comando -->
-        <Grid
-            Grid.Row="3"
-            ColumnDefinitions="*,Auto"
-            ColumnSpacing="10">
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*,Auto"
+              ColumnSpacing="10">
 
             <Entry
                 Grid.Column="0"
@@ -69,9 +69,7 @@
                 TextColor="White"
                 FontSize="18"
                 WidthRequest="55" />
-
         </Grid>
 
     </Grid>
-
 </ContentPage>
